@@ -1,30 +1,27 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "pico/cyw43_arch.h"
-#include "pico/bootrom.h"
 #include "hardware/pio.h"
 #include "hardware/clocks.h"
 #include "hardware/irq.h"
-#include "hardware/gpio.h"
-#include "hardware/timer.h"
 #include "ws2812.pio.h"
 
 // ---------------- Variáveis - INÍCIO ----------------
 
-static volatile uint32_t last_time = 0;
-static volatile int contador = 0;
-static volatile bool controle = false;
+static volatile uint32_t last_time = 0; // Variável para armazenar o tempo do último callback.
+static volatile int contador = 0;       // Contador dos números.
+static volatile bool controle = false;  // Controle para o WS2812.
 
 // ---------------- Variáveis - FIM ----------------
 
 // ---------------- Defines - INÍCIO ----------------
 
-#define green_button 5
-#define red_button 6
+#define green_button 5 // Define o pino do botão verde.
+#define red_button 6   // Define o pino do botão vermelho.
 
-#define red_rgb 11
-#define green_rgb 12
-#define blue_rgb 13
+#define red_rgb 11     // Define o pino vermelho do LED.
+#define green_rgb 12   // Define o pino verde do LED.
+#define blue_rgb 13    // Define o pino azul do LED.
 
 // ---------------- Defines - FIM ----------------
 
@@ -109,14 +106,15 @@ void npWrite()
 
 // ---------------- Desenhar - INÍCIO ----------------
 
+// Função para facilitar o desenho no WS2812 utilizando 3 matrizes para o R, G e B.
 void npDraw(uint8_t vetorR[5][5], uint8_t vetorG[5][5], uint8_t vetorB[5][5])
 {
   int i, j,idx,col;
     for (i = 0; i < 5; i++) {
-        idx = (4 - i) * 5; // Calcula o índice base para a linha
+        idx = (4 - i) * 5; // Calcula o índice base para a linha.
         for (j = 0; j < 5; j++) {
-            col = (i % 2 == 0) ? (4 - j) : j; // Inverte a ordem das colunas nas linhas pares
-            npSetLED(idx + col, vetorR[i][j], vetorG[i][j], vetorB[i][j]);
+            col = (i % 2 == 0) ? (4 - j) : j; // Inverte a ordem das colunas nas linhas pares.
+            npSetLED(idx + col, vetorR[i][j], vetorG[i][j], vetorB[i][j]); // Preenche o buffer com os valores da matriz.
         }
     }
 }
@@ -140,9 +138,9 @@ void num_0() {
     {  0  , 255 ,  0  , 255 ,  0  },
     {  0  , 255 , 255 , 255 ,  0  }
   };
-  npDraw(vetorRG,vetorRG,vetorB);
-  npWrite();
-  npClear();
+  npDraw(vetorRG,vetorRG,vetorB); // Carrega os buffers.
+  npWrite();                      // Escreve na matriz de LEDS.
+  npClear();                      // Limpa os buffers (não necessário, mas por garantia).
 }
 
 void num_1() {
@@ -325,8 +323,7 @@ void num_9() {
   npClear();
 }
 
-// ---------------- Números - FIM ----------------
-
+// Função para para exibir o número passado como parâmetro na matriz de LEDS.
 int handle_numbers(int num) {
   switch(num) {
     case 0:
@@ -363,10 +360,15 @@ int handle_numbers(int num) {
       return 1;
       break;
   }
-  printf("%d Escrito!\n", num);
+  printf("%d Escrito!\n", num); // Print para visualização no terminal.
   return 0;
 }
 
+// ---------------- Números - FIM ----------------
+
+// ---------------- Inicializações e Interrupção - INÍCIO ----------------
+
+// Inicializa os botões configurando os pinos apropriados.
 void init_buttons() {
   gpio_init(red_button);
   gpio_init(green_button);
@@ -376,6 +378,7 @@ void init_buttons() {
   gpio_pull_up(green_button);
 }
 
+// Inicializa o LED RGB configurando os pinos apropriados.
 void init_RGB() {
   gpio_init(red_rgb);
   gpio_init(green_rgb);
@@ -388,27 +391,30 @@ void init_RGB() {
   gpio_put(blue_rgb, 0);
 }
 
+// Callback da interrupção dos botões.
 void gpio_irq_callback(uint gpio, uint32_t events) {
-  // Obtém o tempo atual em microssegundos
+  // Obtém o tempo atual em microssegundos.
   uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
-  // Verifica se passou tempo suficiente desde o último evento
-  if (current_time - last_time > 200) { // 200 ms de debouncing
-    last_time = current_time; // Atualiza o tempo do último evento
+  // Verifica se passou tempo suficiente desde o último evento.
+  if (current_time - last_time > 200) { // 200 ms de debouncing.
+    last_time = current_time; // Atualiza o tempo do último evento.
     if( (gpio == red_button) && (contador > 0) ) {
-      contador--;
+      contador--; // Decrementa o contador se o botão vermelho for pressionado.
     }else
     if( (gpio == green_button) && (contador < 9) ) {
-      contador++;
+      contador++; // Incrementa o contador se o botão verde for pressionado.
     }
-    controle = true;
-    printf("Interrupt! GPIO = %d | Contador = %d\n", gpio, contador);
+    controle = true; // Sinaliza que houve uma mudança no contador
+    printf("Interrupt! GPIO = %d | Contador = %d\n", gpio, contador); // Print para visualização no terminal.
   }
 }
 
+// ---------------- Inicializações e Interrupção - FIM ----------------
+
 int main()
 {
-  float contagem = 0;
+  float contagem = 0; // Contador de piscadas do LED.
 
   stdio_init_all();
 
@@ -417,28 +423,27 @@ int main()
   npClear();
   num_0();
 
-  // Inicializa os botões
+  // Inicializa os botões.
   init_buttons();
 
-  // Inicializa os botões
+  // Inicializa o LED RGB.
   init_RGB();
 
-  // Configuração da interrupção
+  // Configuração da interrupção.
   gpio_set_irq_enabled_with_callback(red_button, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_callback);
   gpio_set_irq_enabled_with_callback(green_button, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_callback);
 
   while (true)
   {
-    sleep_ms(100); // Aguarda 100 milissegundos para piscar o led 5 vezes por segundo e para o melhor funcionamento do simulador
+    sleep_ms(100); // Aguarda 100 ms para piscar o LED 5 vezes por segundo e também garantir a estabilidade do simulador.
 
     if(controle) {
-      handle_numbers(contador);
-      controle = false;
+      handle_numbers(contador); // Atualiza a exibição do número se houve alteração no contador.
+      controle = false; // Reseta a flag de controle.
     }
 
-    gpio_put(red_rgb, !gpio_get(red_rgb));
-    contagem++;
-    printf("Contagem de piscadas: %.2f\n",contagem/2);
-
+    gpio_put(red_rgb, !gpio_get(red_rgb)); // Alterna o estado do LED vermelho.
+    contagem++; // Incrementa a contagem de piscadas.
+    printf("Contagem de piscadas: %.2f\n",contagem/2); // Exibe a contagem de piscadas.
   }
 }
