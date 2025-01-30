@@ -1,12 +1,21 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "hardware/pio.h"
 #include "pico/cyw43_arch.h"
-#include "hardware/clocks.h"
 #include "pico/bootrom.h"
+#include "hardware/pio.h"
+#include "hardware/clocks.h"
+#include "hardware/irq.h"
+#include "hardware/gpio.h"
+#include "hardware/timer.h"
 #include "ws2812.pio.h"
 
-// ---------------- DEFINES - INÍCIO ----------------
+// ---------------- Variáveis - INÍCIO ----------------
+
+static volatile uint32_t last_time = 0;
+
+// ---------------- Variáveis - FIM ----------------
+
+// ---------------- Defines - INÍCIO ----------------
 
 #define green_button 5
 #define red_button 6
@@ -15,7 +24,7 @@
 #define rgb_green 12
 #define rgb_blue 13
 
-// ---------------- DEFINES - FIM ----------------
+// ---------------- Defines - FIM ----------------
 
 // ---------------- WS2812 - INÍCIO ----------------
 
@@ -389,15 +398,25 @@ void init_RGB() {
   gpio_put(rgb_blue, 0);
 }
 
+void gpio_irq_callback(uint gpio, uint32_t events) {
+  // Obtém o tempo atual em microssegundos
+  uint32_t current_time = to_ms_since_boot(get_absolute_time());
+
+  // Verifica se passou tempo suficiente desde o último evento
+  if (current_time - last_time > 200) { // 200 ms de debouncing
+    last_time = current_time; // Atualiza o tempo do último evento
+    printf("TESTE\n");
+  }
+}
+
 int main()
 {
-  int contador = 0, change_control = 1;
-
   stdio_init_all();
 
   // Inicializa matriz de LEDs NeoPixel.
   npInit(LED_PIN);
   npClear();
+  num_0();
 
   // Inicializa os botões
   init_buttons();
@@ -405,26 +424,12 @@ int main()
   // Inicializa os botões
   init_RGB();
 
+  // Configuração da interrupção
+  gpio_set_irq_enabled_with_callback(red_button, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_callback);
+  gpio_set_irq_enabled_with_callback(green_button, GPIO_IRQ_EDGE_FALL, true, &gpio_irq_callback);
+
   while (true)
   {
     sleep_ms(20); // Aguarda 20 milissegundos para melhor funcionamento do simulador
-    
-    if(!gpio_get(red_button)) {
-      if(contador > 0) {
-        contador--;
-        change_control = 1;
-      }
-    }else
-    if(!gpio_get(green_button)) {
-      if(contador < 9) {
-        contador++;
-        change_control = 1;
-      }
-    }
-    if(change_control) {
-      handle_numbers(contador);
-      change_control = 0;
-      sleep_ms(180);
-    }
   }
 }

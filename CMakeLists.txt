@@ -61,6 +61,9 @@ target_link_libraries(Tarefa_interrupcoes
         hardware_pio
         pico_cyw43_arch_none
         hardware_clocks
+        hardware_irq
+        hardware_gpio
+        hardware_timer
         )
 
 pico_add_extra_outputs(Tarefa_interrupcoes)

@@ -39,6 +39,7 @@
     "files.associations": {
         "ws2812.pio.h": "c",
         "cyw43_arch.h": "c",
-        "pio.h": "c"
+        "pio.h": "c",
+        "irq.h": "c"
     }
 }
