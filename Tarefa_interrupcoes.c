@@ -363,6 +363,7 @@ int handle_numbers(int num) {
       return 1;
       break;
   }
+  printf("%d Escrito!\n", num);
   return 0;
 }
 
@@ -400,13 +401,15 @@ void gpio_irq_callback(uint gpio, uint32_t events) {
     if( (gpio == green_button) && (contador < 9) ) {
       contador++;
     }
-    printf("Contador = %d GPIO = %d\n", contador,gpio);
     controle = true;
+    printf("Interrupt! GPIO = %d | Contador = %d\n", gpio, contador);
   }
 }
 
 int main()
 {
+  float contagem = 0;
+
   stdio_init_all();
 
   // Inicializa matriz de LEDs NeoPixel.
@@ -428,12 +431,14 @@ int main()
   {
     sleep_ms(100); // Aguarda 100 milissegundos para piscar o led 5 vezes por segundo e para o melhor funcionamento do simulador
 
-    gpio_put(red_rgb, !gpio_get(red_rgb));
-
     if(controle) {
       handle_numbers(contador);
       controle = false;
     }
+
+    gpio_put(red_rgb, !gpio_get(red_rgb));
+    contagem++;
+    printf("Contagem de piscadas: %.2f\n",contagem/2);
 
   }
 }
