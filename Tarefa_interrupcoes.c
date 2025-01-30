@@ -12,6 +12,8 @@
 // ---------------- Variáveis - INÍCIO ----------------
 
 static volatile uint32_t last_time = 0;
+static volatile int contador = 0;
+static volatile bool controle = false;
 
 // ---------------- Variáveis - FIM ----------------
 
@@ -20,9 +22,9 @@ static volatile uint32_t last_time = 0;
 #define green_button 5
 #define red_button 6
 
-#define rgb_red 11
-#define rgb_green 12
-#define rgb_blue 13
+#define red_rgb 11
+#define green_rgb 12
+#define blue_rgb 13
 
 // ---------------- Defines - FIM ----------------
 
@@ -325,7 +327,7 @@ void num_9() {
 
 // ---------------- Números - FIM ----------------
 
-void handle_numbers(int num) {
+int handle_numbers(int num) {
   switch(num) {
     case 0:
       num_0();
@@ -357,7 +359,11 @@ void handle_numbers(int num) {
     case 9:
       num_9();
       break;
+    default:
+      return 1;
+      break;
   }
+  return 0;
 }
 
 void handle_keypress(char key)
@@ -387,15 +393,15 @@ void init_buttons() {
 }
 
 void init_RGB() {
-  gpio_init(rgb_red);
-  gpio_init(rgb_green);
-  gpio_init(rgb_blue);
-  gpio_set_dir(rgb_red,GPIO_OUT);
-  gpio_set_dir(rgb_green,GPIO_OUT);
-  gpio_set_dir(rgb_blue,GPIO_OUT);
-  gpio_put(rgb_red, 0);
-  gpio_put(rgb_green, 0);
-  gpio_put(rgb_blue, 0);
+  gpio_init(red_rgb);
+  gpio_init(green_rgb);
+  gpio_init(blue_rgb);
+  gpio_set_dir(red_rgb,GPIO_OUT);
+  gpio_set_dir(green_rgb,GPIO_OUT);
+  gpio_set_dir(blue_rgb,GPIO_OUT);
+  gpio_put(red_rgb, 0);
+  gpio_put(green_rgb, 0);
+  gpio_put(blue_rgb, 0);
 }
 
 void gpio_irq_callback(uint gpio, uint32_t events) {
@@ -405,7 +411,14 @@ void gpio_irq_callback(uint gpio, uint32_t events) {
   // Verifica se passou tempo suficiente desde o último evento
   if (current_time - last_time > 200) { // 200 ms de debouncing
     last_time = current_time; // Atualiza o tempo do último evento
-    printf("TESTE\n");
+    if( (gpio == red_button) && (contador > 0) ) {
+      contador--;
+    }else
+    if( (gpio == green_button) && (contador < 9) ) {
+      contador++;
+    }
+    printf("Contador = %d GPIO = %d\n", contador,gpio);
+    controle = true;
   }
 }
 
@@ -431,5 +444,10 @@ int main()
   while (true)
   {
     sleep_ms(20); // Aguarda 20 milissegundos para melhor funcionamento do simulador
+    gpio_put(red_rgb, !gpio_get(red_rgb));
+    if(controle) {
+      handle_numbers(contador);
+      controle = false;
+    }
   }
 }
