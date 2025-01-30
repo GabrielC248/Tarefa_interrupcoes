@@ -366,23 +366,6 @@ int handle_numbers(int num) {
   return 0;
 }
 
-void handle_keypress(char key)
-{
-  switch (key)
-  {
-  case '1':
-    //animacao1();
-    break;
-  case '*':
-    printf("Entrando no modo BOOTSEL. Aguarde...\n");
-    sleep_ms(500);        // Pequena pausa para garantir a saída do texto
-    reset_usb_boot(0, 0); // Reinicia no modo BOOTSEL
-    break;
-  default:
-    break;
-  }
-}
-
 void init_buttons() {
   gpio_init(red_button);
   gpio_init(green_button);
@@ -443,11 +426,14 @@ int main()
 
   while (true)
   {
-    sleep_ms(20); // Aguarda 20 milissegundos para melhor funcionamento do simulador
+    sleep_ms(100); // Aguarda 100 milissegundos para piscar o led 5 vezes por segundo e para o melhor funcionamento do simulador
+
     gpio_put(red_rgb, !gpio_get(red_rgb));
+
     if(controle) {
       handle_numbers(contador);
       controle = false;
     }
+
   }
 }
