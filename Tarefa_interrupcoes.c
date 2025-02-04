@@ -23,7 +23,7 @@ static volatile bool controle = false;  // Controle para o WS2812.
 #define green_rgb 11   // Define o pino verde do LED.
 #define blue_rgb 12    // Define o pino azul do LED.
 
-#define luz 1        // Define a intensidade da luz (0-255)
+#define luz 255        // Define a intensidade da luz (1-255)
 
 // ---------------- Defines - FIM ----------------
 
