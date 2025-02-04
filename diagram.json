@@ -201,9 +201,6 @@
     [ "pico:GP1", "$serialMonitor:TX", "", [] ],
     [ "pico:GP5", "btn2:2.l", "green", [ "v0" ] ],
     [ "pico:GP6", "btn1:2.r", "red", [ "v0" ] ],
-    [ "pico:GP13", "rgb1:B", "blue", [ "v-28.8", "h28.76" ] ],
-    [ "pico:GP12", "rgb1:G", "green", [ "v-38.4", "h9.56" ] ],
-    [ "pico:GP11", "rgb1:R", "red", [ "v-48", "h-19.2" ] ],
     [ "pico:GND.3", "rgb1:COM", "black", [ "v0" ] ],
     [ "rgb2:DOUT", "rgb3:DIN", "green", [ "h-9.6", "v-10.5" ] ],
     [ "rgb3:DOUT", "rgb4:DIN", "green", [ "h-9.6", "v-10.5" ] ],
@@ -285,7 +282,10 @@
     [ "pico:3V3", "r1:2", "green", [ "v19.51", "h115.2" ] ],
     [ "pico:3V3", "r2:2", "green", [ "v19.51", "h-220.8" ] ],
     [ "pico:GND.1", "btn2:1.l", "black", [ "v0" ] ],
-    [ "pico:GND.4", "btn1:1.r", "black", [ "v0" ] ]
+    [ "pico:GND.4", "btn1:1.r", "black", [ "v0" ] ],
+    [ "pico:GP13", "rgb1:R", "red", [ "v0" ] ],
+    [ "pico:GP11", "rgb1:G", "green", [ "v0" ] ],
+    [ "pico:GP12", "rgb1:B", "blue", [ "v-38.4", "h19.16" ] ]
   ],
   "dependencies": {}
 }

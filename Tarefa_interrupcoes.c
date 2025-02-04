@@ -19,9 +19,11 @@ static volatile bool controle = false;  // Controle para o WS2812.
 #define green_button 5 // Define o pino do botão verde.
 #define red_button 6   // Define o pino do botão vermelho.
 
-#define red_rgb 11     // Define o pino vermelho do LED.
-#define green_rgb 12   // Define o pino verde do LED.
-#define blue_rgb 13    // Define o pino azul do LED.
+#define red_rgb 13     // Define o pino vermelho do LED.
+#define green_rgb 11   // Define o pino verde do LED.
+#define blue_rgb 12    // Define o pino azul do LED.
+
+#define luz 1        // Define a intensidade da luz (0-255)
 
 // ---------------- Defines - FIM ----------------
 
@@ -132,11 +134,11 @@ void num_0() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  }
   };
   npDraw(vetorRG,vetorRG,vetorB); // Carrega os buffers.
   npWrite();                      // Escreve na matriz de LEDS.
@@ -152,11 +154,11 @@ void num_1() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  ,  0  , 255 ,  0  ,  0  },
-    {  0  , 255 , 255 ,  0  ,  0  },
-    {  0  ,  0  , 255 ,  0  ,  0  },
-    {  0  ,  0  , 255 ,  0  ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  }
+    {  0  ,  0  , luz ,  0  ,  0  },
+    {  0  , luz , luz ,  0  ,  0  },
+    {  0  ,  0  , luz ,  0  ,  0  },
+    {  0  ,  0  , luz ,  0  ,  0  },
+    {  0  , luz , luz , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -172,11 +174,11 @@ void num_2() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  ,  0  ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  ,  0  ,  0  },
+    {  0  , luz , luz , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -192,11 +194,11 @@ void num_3() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -212,11 +214,11 @@ void num_4() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  }
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -232,11 +234,11 @@ void num_5() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  ,  0  ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  ,  0  ,  0  },
+    {  0  , luz , luz , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -252,11 +254,11 @@ void num_6() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  ,  0  ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  ,  0  ,  0  },
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -272,11 +274,11 @@ void num_7() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -292,11 +294,11 @@ void num_8() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
@@ -312,11 +314,11 @@ void num_9() {
     {  0  ,  0  ,  0  ,  0  ,  0  }
   };
   uint8_t vetorB[5][5] = {
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  , 255 ,  0  , 255 ,  0  },
-    {  0  , 255 , 255 , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  },
-    {  0  ,  0  ,  0  , 255 ,  0  }
+    {  0  , luz , luz , luz ,  0  },
+    {  0  , luz ,  0  , luz ,  0  },
+    {  0  , luz , luz , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  },
+    {  0  ,  0  ,  0  , luz ,  0  }
   };
   npDraw(vetorRG, vetorRG, vetorB);
   npWrite();
